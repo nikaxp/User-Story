@@ -1,0 +1,18 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}All People{% endblock %}
+
+{% block body %}
+    <div>
+        <h1>{{ person.alias }}</h1>
+        {% if person.brochure %}
+        <a href="{{ asset('uploads/brochures/' ~ person.brochure) }}">View photo</a>
+        {% endif %}
+        <p><b>Name:</b> {{ person.name }}</p>
+        <p><b>Surname:</b> {{ person.surname }}</p>
+        <p><b>Description:</b> {{ person.description }}</p>
+        <a href="{{ path('modifyPerson', {'id': person.id}) }}">Edit</a>
+
+
+    </div>
+{% endblock %}

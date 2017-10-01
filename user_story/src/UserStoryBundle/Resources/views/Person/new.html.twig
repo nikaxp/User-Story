@@ -1,0 +1,10 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Create new Person{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_row(form.brochure) }}
+    {{ form_end(form) }}
+{% endblock %}
