@@ -1,6 +1,6 @@
 {% extends "::base.html.twig" %}
 
-{% block title %}All People{% endblock %}
+{% block title %}Person{% endblock %}
 
 {% block body %}
     <div>
@@ -12,7 +12,15 @@
         <p><b>Surname:</b> {{ person.surname }}</p>
         <p><b>Description:</b> {{ person.description }}</p>
         <a href="{{ path('modifyPerson', {'id': person.id}) }}">Edit</a>
-
+        {#<button class = "btn btn-xs "#}
+                {#onclick = "window.location.href='{{ path('addAddress', {'id': person.getId()}) }}' "#}
+                {#type="button"#}
+        {#>Add address</button>#}
+        {% if person.getAddresses() %}
+            {% for a in person.getAddresses() %}
+            <p><b>City:</b> {{ a.city }}</p>
+        {% endfor %}
+        {% endif %}
 
     </div>
 {% endblock %}

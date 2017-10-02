@@ -7,4 +7,10 @@
     {{ form_widget(form) }}
     {{ form_row(form.brochure) }}
     {{ form_end(form) }}
+
+    {% if addressForm %}
+        {{ form_start(addressForm) }}
+        {{ form_widget(addressForm) }}
+        {{ form_end(addressForm) }}
+    {% endif %}
 {% endblock %}
