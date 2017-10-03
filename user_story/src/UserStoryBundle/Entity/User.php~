@@ -1,0 +1,45 @@
+<?php
+
+namespace UserStoryBundle\Entity;
+use FOS\UserBundle\Model\User as BaseUser;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * User
+ *
+ * @ORM\Table(name="fos_user")
+ * @ORM\Entity(repositoryClass="UserStoryBundle\Repository\UserRepository")
+ */
+class User extends BaseUser
+{
+    /**
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @ORM\OneToMany(targetEntity = "Person", mappedBy = "user")
+     */
+    private $people;
+
+
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}
+

@@ -3,6 +3,10 @@
 {% block title %}Modify Person{% endblock %}
 
 {% block body %}
+    <button class = "btn btn-xs "
+            onclick = "window.location.href='{{ path('showPerson', {'id': person.id}) }}' "
+            type="button"
+    >Back</button>
     <h2>Edit Person</h2>
     {{ form_start(form) }}
     {{ form_widget(form) }}

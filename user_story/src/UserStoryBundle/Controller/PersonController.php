@@ -121,7 +121,7 @@ class PersonController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($person);
             $em->flush();
-            return $this->redirectToRoute('showPerson', array(
+            return $this->redirectToRoute('modifyPerson', array(
                 'id'=>$person->getId()
             ));
         }
@@ -146,7 +146,7 @@ class PersonController extends Controller
     }
 
     /**
-     * @Route("/{id}", name = "showPerson")
+     * @Route("/{id}", name = "showPerson", requirements = {"id" = "\d+"})
      */
 
     public function showPersonAction($id)

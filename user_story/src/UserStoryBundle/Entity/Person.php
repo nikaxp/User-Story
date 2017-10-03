@@ -76,6 +76,12 @@ class Person
     private $emails;
 
     /**
+     * @ORM\ManyToOne(targetEntity = "User", inversedBy="people")
+     * @ORM\JoinColumn(name = "fos_user_id", referencedColumnName = "id", nullable = true)
+     */
+    private $user;
+
+    /**
      * Get id
      *
      * @return int
@@ -301,5 +307,29 @@ class Person
     public function getEmails()
     {
         return $this->emails;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \UserStoryBundle\Entity\User $user
+     *
+     * @return Person
+     */
+    public function setUser(\UserStoryBundle\Entity\User $user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \UserStoryBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }
