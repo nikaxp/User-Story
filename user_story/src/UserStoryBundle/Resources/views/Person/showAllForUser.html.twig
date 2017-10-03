@@ -1,0 +1,25 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}All People{% endblock %}
+
+{% block body %}
+    <ul>
+    {% for p in people|sortbyfield('alias') %}
+        <li>
+            <a href="{{ path('showPerson', {'id': p.getId()}) }}"><strong>{{ p.getAlias() }}</strong></a>
+
+            <button class = "btn btn-xs "
+                    onclick = "window.location.href='{{ path('modifyPerson', {'id': p.getId()}) }}' "
+                    type="button"
+            >Edit</button>
+
+            <button class = "btn btn-xs btn-danger"
+                    onclick = "window.location.href='{{ path('deletePerson', {'id': p.getId()}) }}' "
+            >Delete</button>
+
+        </li>
+    {% else %}
+        Sorry, there's no people :(
+    {% endfor %}
+        <ul>
+{% endblock %}

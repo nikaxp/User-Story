@@ -137,10 +137,11 @@ class PersonController extends Controller
      */
     public function showAllAction()
     {
+        $user = $this->getUser()->getId();
         $repo = $this->getDoctrine()->getRepository('UserStoryBundle:Person');
-        $people = $repo->findAll();
+        $people = $repo->findBy(['user' => $user]);
 
-        return $this->render('UserStoryBundle:Person:showAll.html.twig', array(
+        return $this->render('UserStoryBundle:Person:showAllForUser.html.twig', array(
             'people' => $people
         ));
     }
