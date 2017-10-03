@@ -7,17 +7,15 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AddressType extends AbstractType
+class PhoneType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('city')
-            ->add('street')
-            ->add('houseNumber')
-            ->add('apartmentNumber')
+        $builder->add('number')
+            ->add('type')
             ->add('save', SubmitType::class);
     }
     
@@ -27,7 +25,7 @@ class AddressType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'UserStoryBundle\Entity\Address'
+            'data_class' => 'UserStoryBundle\Entity\Phone'
         ));
     }
 
@@ -36,11 +34,7 @@ class AddressType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'userstorybundle_address';
-    }
-    public function getName()
-    {
-        return 'address';
+        return 'userstorybundle_phone';
     }
 
 

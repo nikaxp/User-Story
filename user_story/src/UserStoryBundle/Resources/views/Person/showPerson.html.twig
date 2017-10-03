@@ -6,20 +6,60 @@
     <div>
         <h1>{{ person.alias }}</h1>
         {% if person.brochure %}
+            <img src="/uploads/brochures/{{ person.brochure }}" width="10%" /><br>
         <a href="{{ asset('uploads/brochures/' ~ person.brochure) }}">View photo</a>
         {% endif %}
         <p><b>Name:</b> {{ person.name }}</p>
         <p><b>Surname:</b> {{ person.surname }}</p>
         <p><b>Description:</b> {{ person.description }}</p>
-        <a href="{{ path('modifyPerson', {'id': person.id}) }}">Edit</a>
-        {#<button class = "btn btn-xs "#}
-                {#onclick = "window.location.href='{{ path('addAddress', {'id': person.getId()}) }}' "#}
-                {#type="button"#}
-        {#>Add address</button>#}
+        <a href="{{ path('modifyPerson', {'id': person.id}) }}">Edit</a><br>
+
         {% if person.getAddresses() %}
-            {% for a in person.getAddresses() %}
-            <p><b>City:</b> {{ a.city }}</p>
-        {% endfor %}
+            <h4>Addresses:</h4>
+            <ul>
+                {% for a in person.getAddresses() %}
+                    <li>
+                    {{ a.city }},  {{ a.street }} {{ a.houseNumber }} / {{ a.apartmentNumber }}
+                        <button class = "btn btn-xs "
+                                onclick = "window.location.href='{{ path('deleteAddress', {'id': a.id()}) }}' "
+                                type="button"
+                        >Delete</button>
+                    </li>
+
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if person.getPhones() %}
+            <h4>Phones:</h4>
+            <ul>
+                {% for p in person.getPhones() %}
+                    <li>
+                        {{ p.number }}
+                        <button class = "btn btn-xs "
+                                onclick = "window.location.href='{{ path('deletePhone', {'id': p.id()}) }}' "
+                                type="button"
+                        >Delete</button>
+                        <ul><li>{{ p.type }}</li></ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if person.getEmails() %}
+            <h4>Emails:</h4>
+            <ul>
+                {% for e in person.getEmails() %}
+                    <li>
+                        {{ e.addressEmail }}
+                        <button class = "btn btn-xs "
+                                onclick = "window.location.href='{{ path('deleteEmail', {'id': e.id()}) }}' "
+                                type="button"
+                        >Delete</button>
+                        <ul><li>{{ e.type }}</li></ul>
+                    </li>
+                {% endfor %}
+            </ul>
         {% endif %}
 
     </div>

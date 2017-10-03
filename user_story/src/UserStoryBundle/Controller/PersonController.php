@@ -9,8 +9,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use UserStoryBundle\Entity\Address;
 use UserStoryBundle\Entity\Person;
+use UserStoryBundle\Entity\Phone;
+use UserStoryBundle\Entity\Email;
 use UserStoryBundle\Form\PersonType;
+use UserStoryBundle\Form\PhoneType;
 use UserStoryBundle\Form\AddressType;
+use UserStoryBundle\Form\EmailType;
 use Symfony\Component\HttpFoundation\File;
 use Symfony\Component\Form\Form;
 
@@ -70,6 +74,8 @@ class PersonController extends Controller
 
         if($person) {
             $address = new Address();
+            $phone = new Phone();
+            $email = new Email();
             $form = $this->createForm(PersonType::class, $person, array(
                 'action' => $this->generateUrl('modifyPerson', array('id' => $id))
             ));
@@ -79,10 +85,18 @@ class PersonController extends Controller
             $addressForm = $this->createForm(AddressType::class, $address, array(
                 'action' => $this->generateUrl('addAddress', array('id' => $id))
             ));
+            $phoneForm = $this->createForm(PhoneType::class, $phone, array(
+                'action' => $this->generateUrl('addPhone', array('id' => $id))
+            ));
+            $emailForm = $this->createForm(EmailType::class, $email, array(
+                'action' => $this->generateUrl('addEmail', array('id' => $id))
+            ));
 
             return $this->render('UserStoryBundle:Person:modify.html.twig', array(
                 'form' => $form->createView(), 'person' =>$person,
-                'addressForm' => $addressForm->createView()
+                'addressForm' => $addressForm->createView(),
+                'phoneForm' => $phoneForm->createView(),
+                'emailForm' => $emailForm->createView()
             ));
         }
             return new Response("No person found");
@@ -139,13 +153,10 @@ class PersonController extends Controller
     {
         $repo = $this->getDoctrine()->getRepository('UserStoryBundle:Person');
         $person = $repo->find($id);
-//        $address = $person->getAddresses();
-//        var_dump($address);
 
         if($person) {
             return $this->render('UserStoryBundle:Person:showPerson.html.twig', array(
                 'person' => $person,
-//                'address' => $address,
             ));
         }
         return new Response("Person not found");
@@ -175,7 +186,7 @@ class PersonController extends Controller
 
     /**
      * @Route("/{id}/addAddress", name = "addAddress")
-//     * @Method("POST")
+     * @Method("POST")
      */
     public function addAddressAction(Request $request, $id)
     {
@@ -197,9 +208,129 @@ class PersonController extends Controller
             ));
         }
 
-        return new Response("Incorrect data. Try create Person again.");
+        return new Response("Incorrect data. Try create new address again.");
 
     }
+
+    /**
+     * @Route("/{id}/address/delete", name = "deleteAddress")
+     */
+    public function deleteAddressAction($id)
+    {
+        $repo = $this->getDoctrine()->getRepository('UserStoryBundle:Address');
+        $address = $repo->find($id);
+        if($address) {
+            $personId = $address->getPerson()->getId();
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($address);
+            $em->flush();
+
+            return $this->redirectToRoute('showPerson', ['id' => $personId]);
+
+        }
+
+        return $this->redirectToRoute('showAll');
+    }
+
+
+
+    /**
+     * @Route("/{id}/addPhone", name = "addPhone")
+     * @Method("POST")
+     */
+    public function addPhoneAction(Request $request, $id)
+    {
+        $repo = $this->getDoctrine()->getRepository('UserStoryBundle:Person');
+        $person = $repo->find($id);
+
+        $phone = new Phone();
+        $form = $this->createForm(PhoneType::class, $phone);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $phone = $form->getData();
+            $phone->setPerson($person);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($phone);
+            $em->flush();
+            return $this->redirectToRoute('showPerson', array(
+                'id' => $phone->getPerson()->getId()
+            ));
+        }
+
+        return new Response("Incorrect data. Try create new phone again.");
+
+    }
+
+    /**
+     * @Route("/{id}/phone/delete", name = "deletePhone")
+     */
+    public function deletePhoneAction($id)
+    {
+        $repo = $this->getDoctrine()->getRepository('UserStoryBundle:Phone');
+        $phone = $repo->find($id);
+        if($phone) {
+            $personId = $phone->getPerson()->getId();
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($phone);
+            $em->flush();
+
+            return $this->redirectToRoute('showPerson', ['id' => $personId]);
+
+        }
+
+        return $this->redirectToRoute('showAll');
+    }
+
+    /**
+     * @Route("/{id}/addEmail", name = "addEmail")
+     * @Method("POST")
+     */
+    public function addEmailAction(Request $request, $id)
+    {
+        $repo = $this->getDoctrine()->getRepository('UserStoryBundle:Person');
+        $person = $repo->find($id);
+
+        $email = new Email();
+        $form = $this->createForm(EmailType::class, $email);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $email = $form->getData();
+            $email->setPerson($person);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($email);
+            $em->flush();
+            return $this->redirectToRoute('showPerson', array(
+                'id' => $email->getPerson()->getId()
+            ));
+        }
+
+        return new Response("Incorrect data. Try create new phone again.");
+
+    }
+
+    /**
+     * @Route("/{id}/email/delete", name = "deleteEmail")
+     */
+    public function deleteEmailAction($id)
+    {
+        $repo = $this->getDoctrine()->getRepository('UserStoryBundle:Email');
+        $email = $repo->find($id);
+        if($email) {
+            $personId = $email->getPerson()->getId();
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($email);
+            $em->flush();
+
+            return $this->redirectToRoute('showPerson', ['id' => $personId]);
+
+        }
+
+        return $this->redirectToRoute('showAll');
+    }
+
+
 
 
 

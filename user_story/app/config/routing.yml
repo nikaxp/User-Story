@@ -2,4 +2,5 @@ user_story:
     resource: "@UserStoryBundle/Controller/"
     type:     annotation
     prefix:   /
-
+logout:
+    path: /logout

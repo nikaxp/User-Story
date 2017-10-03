@@ -3,14 +3,30 @@
 {% block title %}Modify Person{% endblock %}
 
 {% block body %}
+    <h2>Edit Person</h2>
     {{ form_start(form) }}
     {{ form_widget(form) }}
     {{ form_row(form.brochure) }}
     {{ form_end(form) }}
 
     {% if addressForm %}
+        <b>Add new address:</b>
         {{ form_start(addressForm) }}
         {{ form_widget(addressForm) }}
         {{ form_end(addressForm) }}
+    {% endif %}
+
+    {% if phoneForm %}
+        <b>Add new phone:</b>
+        {{ form_start(phoneForm) }}
+        {{ form_widget(phoneForm) }}
+        {{ form_end(phoneForm) }}
+    {% endif %}
+
+    {% if emailForm %}
+        <b>Add new email:</b>
+        {{ form_start(emailForm) }}
+        {{ form_widget(emailForm) }}
+        {{ form_end(emailForm) }}
     {% endif %}
 {% endblock %}
