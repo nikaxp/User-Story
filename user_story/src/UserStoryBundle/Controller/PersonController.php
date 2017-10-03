@@ -17,6 +17,7 @@ use UserStoryBundle\Form\AddressType;
 use UserStoryBundle\Form\EmailType;
 use Symfony\Component\HttpFoundation\File;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class PersonController extends Controller
 {
@@ -43,11 +44,13 @@ class PersonController extends Controller
     public function newAction(Request $request)
     {
         $person = new Person();
+        $user = $this->getUser();
         $form = $this->createForm(PersonType::class, $person);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
             $person = $form->getData();
             $this->fileBrochure($form, $person);
+            $person->setUser($user);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($person);
@@ -152,8 +155,11 @@ class PersonController extends Controller
 
     public function showPersonAction($id)
     {
+        //$this->denyAccessUnlessGranted('ROLE_USER', null, 'Access denied!');
         $repo = $this->getDoctrine()->getRepository('UserStoryBundle:Person');
         $person = $repo->find($id);
+
+        $this->denyAccessUnlessGranted('view', $person);
 
         if($person) {
             return $this->render('UserStoryBundle:Person:showPerson.html.twig', array(

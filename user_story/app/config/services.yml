@@ -22,3 +22,8 @@ services:
         class: Snilius\Twig\SortByFieldExtension
         tags:
             - { name: twig.extension }
+    _instanceof:
+        Symfony\Component\Security\Core\Authorization\Voter\VoterInterface:
+            tags: [security.voter]
+
+    AppBundle\Security\PersonVoter: ~

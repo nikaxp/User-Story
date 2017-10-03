@@ -332,4 +332,14 @@ class Person
     {
         return $this->user;
     }
+
+    /**
+     * Is the given User Story?
+     *
+     * @return bool
+     */
+    public function isAuthor (User $user = null)
+    {
+        return $user->getId() == $this->getUser();
+    }
 }
