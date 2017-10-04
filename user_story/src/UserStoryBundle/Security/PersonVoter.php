@@ -1,9 +1,9 @@
+<?php
+
 namespace UserStoryBundle\Security;
 
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\User\UserInterface;
 use UserStoryBundle\Entity\Person;
 use UserStoryBundle\Entity\User;
 
@@ -27,21 +27,21 @@ class PersonVoter extends Voter
 
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
-    $user = $token->getUser();
+        $user = $token->getUser();
 
-    if (!$user instanceof User) {
-        return false;
-    }
+        if (!$user instanceof User) {
+            return false;
+        }
 
-    // you know $subject is a Post object, thanks to supports
+    // you know $subject is a Person object, thanks to supports
     /** @var Person $person */
     $person = $subject;
 
     switch($attribute) {
         case self::VIEW:
-            return $this->canView($post, $user);
+            return $this->canView($person, $user);
         case self::EDIT:
-            return $this->canEdit($post, $user);
+            return $this->canEdit($person, $user);
     }
 
     throw new \LogicException('This code should not be reached!');
@@ -53,11 +53,11 @@ class PersonVoter extends Voter
             return true;
         }
 
-        return !$post->isPrivate();
+        return false;
     }
 
     private function canEdit(Person $person, User $user)
     {
-    return $user === $person->getOwner();
+        return $user === $person->getUser();
     }
 }

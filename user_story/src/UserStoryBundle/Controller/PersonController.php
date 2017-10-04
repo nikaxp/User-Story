@@ -17,7 +17,6 @@ use UserStoryBundle\Form\AddressType;
 use UserStoryBundle\Form\EmailType;
 use Symfony\Component\HttpFoundation\File;
 use Symfony\Component\Form\Form;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class PersonController extends Controller
 {
@@ -50,6 +49,7 @@ class PersonController extends Controller
         if ($form->isSubmitted()) {
             $person = $form->getData();
             $this->fileBrochure($form, $person);
+
             $person->setUser($user);
 
             $em = $this->getDoctrine()->getManager();
@@ -76,6 +76,9 @@ class PersonController extends Controller
         $person = $repo->find($id);
 
         if($person) {
+
+            $this->denyAccessUnlessGranted('edit', $person);
+
             $address = new Address();
             $phone = new Phone();
             $email = new Email();
@@ -159,15 +162,16 @@ class PersonController extends Controller
         $repo = $this->getDoctrine()->getRepository('UserStoryBundle:Person');
         $person = $repo->find($id);
 
-        $this->denyAccessUnlessGranted('view', $person);
 
         if($person) {
+            $this->denyAccessUnlessGranted('view', $person);
+
             return $this->render('UserStoryBundle:Person:showPerson.html.twig', array(
                 'person' => $person,
             ));
         }
-        return new Response("Person not found");
 
+        return new Response("Person not found");
     }
 
     /**
@@ -178,6 +182,7 @@ class PersonController extends Controller
         $repo = $this->getDoctrine()->getRepository('UserStoryBundle:Person');
         $person = $repo->find($id);
         if($person) {
+            $this->denyAccessUnlessGranted('edit', $person);
             $alias = $person->getAlias();
             $em = $this->getDoctrine()->getManager();
             $em->remove($person);
@@ -221,6 +226,7 @@ class PersonController extends Controller
 
     /**
      * @Route("/{id}/address/delete", name = "deleteAddress")
+     * @Method("POST")
      */
     public function deleteAddressAction($id)
     {
@@ -271,6 +277,7 @@ class PersonController extends Controller
 
     /**
      * @Route("/{id}/phone/delete", name = "deletePhone")
+     * @Method("POST")
      */
     public function deletePhoneAction($id)
     {
@@ -319,6 +326,7 @@ class PersonController extends Controller
 
     /**
      * @Route("/{id}/email/delete", name = "deleteEmail")
+     * @Method("POST")
      */
     public function deleteEmailAction($id)
     {

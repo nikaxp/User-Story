@@ -338,8 +338,8 @@ class Person
      *
      * @return bool
      */
-    public function isAuthor (User $user = null)
-    {
-        return $user->getId() == $this->getUser();
-    }
+//    public function isAuthor (User $user = null)
+//    {
+//        return $user->getId() == $this->getUser();
+//    }
 }
